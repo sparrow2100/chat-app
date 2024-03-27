@@ -1,6 +1,7 @@
 import {View, Text, KeyboardAvoidingView, Platform} from 'react-native';
 import { useEffect, useState } from 'react';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+import {AsyncStorage} from "@react-native-async-storage/async-storage";
 
 const Chat = ({route, navigation}) => {
     const {name} = route.params;
