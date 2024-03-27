@@ -3,42 +3,37 @@ import { useEffect, useState } from 'react';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import {AsyncStorage} from "@react-native-async-storage/async-storage";
 
-const Chat = ({route, navigation}) => {
-    const {name} = route.params;
-    const {color} = route.params;
+import { collection, orderBy, addDoc, onSnapshot, query } from "firebase/firestore";
 
+const Chat = ({route, navigation, db}) => {
     const [messages, setMessages] = useState([]);
    
 
    
     useEffect(()=>{
-        navigation.setOptions({title: name});
-        // two static messages that will be displayed once the user enters the chat
-        setMessages([
-            {
-                _id: 1,
-                text: 'You have entered the chat',
-                createdAt: new Date(),
-                system: true,
-              },
-            {
-              _id: 2,
-              text: "Hello developer",
-              createdAt: new Date(),
-              user: {
-                _id: 2,
-                name: "React Native",
-                avatar: "https://placeimg.com/140/140/any",
-              },
-            },
-            
-          ]);
+        navigation.setOptions({title: route.params.name});
+        const unsubscribeMessages = onSnapshot(query(collection(db, "messages"), orderBy("createdAt", "desc")), (documentSnapshot) => {
+          let newMessages = [];
+          documentSnapshot.forEach(doc =>{
+            const docData = doc.data();
+            console.log(docData.createdAt);
+            const createdAtDate = new Date(docData.createdAt.seconds + (docData.createdAt.nanoseconds / 1000));
+            newMessages.push({id: doc.id, ...docData, createdAt: createdAtDate });
+          });
+          setMessages(newMessages)
+        });
+
+        //clean up code
+        return () => {
+          if (unsubscribeMessages) unsubscribeMessages();
+        }
         
     }, []);
 
     //new message gets appended to the existing messages, to be displayed in the chat
     const onSend = (newMessages) => {
-        setMessages(previousMessages => GiftedChat.append(previousMessages, newMessages))
+        // setMessages(previousMessages => GiftedChat.append(previousMessages, newMessages))
+        addDoc(collection(db, "messages"), newMessages[0])
       }
 
     //change the color of the text bubbles
@@ -57,14 +52,15 @@ const Chat = ({route, navigation}) => {
       }
 
     return(
-        <View style={{flex: 1, backgroundColor: color} }>
+        <View style={{flex: 1, backgroundColor: route.params.color} }>
             <Text style={{alignSelf: 'center'}} >Chat Screen</Text>
             <GiftedChat
                  messages={messages}
                  renderBubble={renderBubble}
                   onSend={messages => onSend(messages)}
                  user={{
-                  _id: 1
+                  _id: route.params.userID,
+                  name: route.params.name,
                 }}
               
             />
