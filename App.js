@@ -1,16 +1,30 @@
 
-import { StyleSheet, Text, TextInput, View, Button, Alert } from 'react-native';
-import { useState } from 'react';
+import { Alert, Logbox } from 'react-native';
+import { useState, useEffect } from 'react';
 import Start from './components/Start';
 import Chat from './components/Chat';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { useNetInfo } from "@react-native-community/netinfo";
+
 //import from firestore
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, disableNetwork, enableNetwork } from "firebase/firestore";
 
 const App = () => {
+  // new state that represents network connectivity status
+  const connectionStatus = useNetInfo();
+
+  // display an alert popup if the connection is lost
+  useEffect(()=>{
+    if (connectionStatus.isConnected === false){
+      Alert.alert("Connection lost");
+    disableNetwork(db)
+    } else if (connectionStatus.isConnected === true) {
+      enableNetwork(db)
+    }
+  }, [connectionStatus.isConnected]);
 
   const firebaseConfig = {
     apiKey: "AIzaSyA1ByDM-RgzwFnhbuSexVeVFWZoGN-tkRI",
@@ -41,9 +55,8 @@ const App = () => {
         />
         <Stack.Screen
         name="Chat"
-        
         >
-           {props => <Chat db={db} {...props} />}
+           {props => <Chat isConnected={connectionStatus.isConnected} db={db} {...props} />}
         </Stack.Screen>
       </Stack.Navigator>
     
