@@ -1,4 +1,4 @@
-import {View, Text, KeyboardAvoidingView, Platform} from 'react-native';
+import {View, KeyboardAvoidingView, Platform} from 'react-native';
 import { useEffect, useState } from 'react';
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
 import {AsyncStorage} from "@react-native-async-storage/async-storage";
@@ -7,7 +7,6 @@ import { collection, orderBy, addDoc, onSnapshot, query } from "firebase/firesto
 
 import MapView from 'react-native-maps'
 
-//import components
 import CustomActions from './CustomActions.js'
 
 
@@ -64,7 +63,7 @@ const Chat = ({route, navigation, db, isConnected, storage}) => {
         addDoc(collection(db, "messages"), newMessages[0])
       }
 
-    //change the color of the text bubbles
+    //change the color of the text bubbles to black and white
     const renderBubble = (props) => {
         return <Bubble
           {...props}

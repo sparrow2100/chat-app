@@ -21,13 +21,13 @@ const Start = ({navigation}) => {
 
     const [name, setName] = useState('');
     const [color, setColor] = useState('');
+
     return(
         <View style={styles.container}>
             <ImageBackground style={styles.backgroundImage}source={require('../assets/background-image.png')}>
                 <Text style={styles.appTitle}>Chat App</Text>
                 <View style={styles.infoBox}>
                     <View style={styles.textInput}>
-                  
                          <TextInput
                          value={name}
                          onChangeText={setName}

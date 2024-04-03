@@ -1,5 +1,5 @@
 
-import { Alert, Logbox } from 'react-native';
+import { Alert} from 'react-native';
 import { useState, useEffect } from 'react';
 import Start from './components/Start';
 import Chat from './components/Chat';
