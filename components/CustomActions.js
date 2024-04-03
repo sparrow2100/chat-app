@@ -95,7 +95,13 @@ const CustomActions = ({wrapperStyle, iconTextStyle, onSend, storage, userID}) =
 
     return (
         //create round button with the '+' symbol
-        <TouchableOpacity style={styles.container} onPress={onActionPress}>
+        <TouchableOpacity
+        style={styles.container} 
+        onPress={onActionPress} 
+        accessible={true} 
+        accessibilityLabel="more options" 
+        accessibilityHint = "lets you choose to send an image or your geolocation"
+        >
             {/* wrapperStyle and iconTextStyle are props */}
             <View style={[styles.wrapper, wrapperStyle]}>
                 <Text style={[styles.iconText, iconTextStyle]}>
