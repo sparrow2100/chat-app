@@ -1,4 +1,4 @@
-import {StyleSheet, View, Text,  TextInput, ImageBackground, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, Text,  TextInput, ImageBackground, TouchableOpacity, Alert} from 'react-native';
 import {useState} from 'react';
 
 //import for authentication
